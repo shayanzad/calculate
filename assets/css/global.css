@@ -1,0 +1,6 @@
+li{
+    @apply dark:text-slate-100
+}
+.tableBtnGlobal{
+    background-color: red;
+}

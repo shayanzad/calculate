@@ -1,0 +1,95 @@
+/** @format */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --v-shadow-key-umbra-opacity: #cccccc9e;
+  --v-shadow-key-penumbra-opacity: #efefef9e;
+}
+html {
+  /* font-size: 14px !important; */
+  direction: rtl;
+}
+body {
+  font-family: IRANSans;
+}
+th,
+tr,
+td {
+  font-family: IRANSans;
+}
+.outline-none {
+  outline: none !important;
+}
+.text-transform-none {
+  text-transform: none !important;
+}
+/* For Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a4a4a4;
+}
+.Vue-Toastification__container.top-left, .Vue-Toastification__container.bottom-left{
+  left: -10em !important; 
+}
+/* For IE, Edge, and Firefox */
+body {
+  -ms-overflow-style: scrollbar;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+  height: 100%;
+}
+.my-toast-font {
+  font-size: 16px;
+  padding: 10px 20px !important; /* تنظیم padding دلخواه */
+  margin: 0; /* حذف margin اضافی */
+  white-space: nowrap; /* جلوگیری از شکستن خط‌ها */
+}
+
+/* For Firefox */
+* {
+  font-family: IRANSans;
+
+  scrollbar-width: thin;
+  direction: rtl;
+  scrollbar-color: #888 #f1f1f1;
+}
+.swal2-title {
+  font-size: 24px !important;
+  font-weight: bold;
+  color: #ff5733;
+}
+
+.swal2-content {
+  font-size: 18px !important;
+  color: #333;
+}
+
+.tableBtnGlobal {
+  /* background-color: red; */
+  border: 1px solid gray;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.1s;
+  margin: 0 5px;
+  height: 30px !important;
+  width: 30px !important;
+  &:hover {
+    background-color: rgba(168, 164, 164, 0.356);
+    transform: scale(1.2);
+  }
+}
