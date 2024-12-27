@@ -2,12 +2,13 @@
   <div dir="rtl">
     <!-- <v-btn @click="gggg = true">لغو</v-btn> -->
 
-    <div class="bg-slate-500">
+    <div class="bg-[#1a1b27]">
+      
       <div
         class="max-w-[1140px] m-auto p-3 h-[200px] flex justify-center flex-col"
       >
         <h1
-          class="text-[35px] text-white border-r-8 pr-5 border-orange-500 font-bold"
+          class="text-[35px] text-white border-r-8 pr-5 border-[#f5a700] font-bold"
         >
           استعلام کرایه حمل بار
         </h1>
@@ -118,7 +119,7 @@
 
             <div class="flex justify-end w-[100%]">
               <v-btn
-                class="mt-5 !bg-orange-500 p-4 !text-white"
+                class="mt-5 !bg-[#f5a700] p-4 !text-white"
                 type="submit"
                 color="secondry"
                 @click="submit"
@@ -134,7 +135,7 @@
         <div class="mb-2">محاسبه شده بر اساس فرمول اداره راه</div>
         <v-row>
           <v-col>
-            <div class="border-2 !border-orange-500 p-4 rounded-md">
+            <div class="border-2 !border-[#f5a700] p-4 rounded-md">
               <div class="mb-3">
                 <span>مبدا : <v-icon>mdi-map-marker-outline</v-icon></span>
                 <span>{{ calculateModel.origin }}</span>
@@ -273,7 +274,7 @@
         <div class="flex justify-end w-[100%]">
           <v-btn
             @click="reStore()"
-            class="mt-5 !bg-orange-500 p-4 !text-white"
+            class="mt-5 !bg-[#f5a700] p-4 !text-white"
             color="secondry"
           >
             بستن
@@ -283,7 +284,7 @@
       <div v-if="!showForm" class="mt-4">
         <v-row>
           <v-col cols="8">
-            <div class="border-2 !border-orange-500 p-4 rounded-md">
+            <div class="border-2 !border-[#f5a700] p-4 rounded-md">
               <div class="mb-3">
                 <span>
                   <v-icon class="text-gray-400">mdi-map-marker-outline</v-icon>
@@ -445,7 +446,7 @@
           </v-btn>
           <v-btn
             @click="sefaresh()"
-            class="mt-5 mx-2 !bg-orange-500 p-4 !text-white"
+            class="mt-5 mx-2 !bg-[#f5a700] p-4 !text-white"
             color="secondry"
           >
             سفارش
@@ -495,7 +496,7 @@
           @click="calculate"
           :loading="calculateLoading"
           variant="outlined"
-          class="mr-2 text-orange-500"
+          class="mr-2 text-[#f5a700]"
           >محاسبه</v-btn
         >
       </div>
@@ -540,7 +541,7 @@
               <div class="flex justify-end">
                 <v-btn @click="setStatus('cancle')" class="mx-2">انصراف</v-btn>
                 <v-btn
-                  class="!bg-orange-500 p-4 !text-white"
+                  class="!bg-[#f5a700] p-4 !text-white"
                   color="secondry"
                   :loading="loadingconfirm"
                   @click="setStatus('confirm')"

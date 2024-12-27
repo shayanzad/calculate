@@ -5,7 +5,7 @@
         <div class="flex items-center lg:!hidden" @click="toggleMenu()">
           <v-icon class="mx-2 cursor-pointer" title="">mdi-menu</v-icon>
         </div>
-        <img class="w-[150px]" src="../../assets/images/bargram.png" />
+        <img class="w-[150px]" src="../../assets/images/rsz_1logo21.png" />
       </div>
       <div class="flex justify-between items-center w-full">
         
