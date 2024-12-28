@@ -5,11 +5,23 @@
         <div class="flex items-center lg:!hidden" @click="toggleMenu()">
           <v-icon class="mx-2 cursor-pointer" title="">mdi-menu</v-icon>
         </div>
-        <img class="w-[150px]" src="../../assets/images/rsz_1logo21.png" />
+        <a href="https://shayantarabar.ir">
+
+          <img class="w-[150px]" src="../../assets/images/rsz_1logo21.png" />
+        </a>
       </div>
       <div class="flex justify-between items-center w-full">
-        
-        
+        <div class="mx-10">
+          <a href="https://shayantarabar.ir">
+            <span class=" hover:bg-slate-50 p-2"> صفحه اصلی </span>
+          </a>
+          <span
+            class="mx-3 rounded-md p-2  "
+            style="border: 2px solid #f5a700;color: #f5a700;"
+          >
+              محاسبه کرایه
+          </span>
+        </div>
       </div>
     </div>
   </div>
