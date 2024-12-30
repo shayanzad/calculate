@@ -5,7 +5,7 @@
         <div class="flex flex-col">
             <div class="text-start my-4">
             <h2 class="font-bold text-xl">
-              سامانه پایانه بار مجازی بارگرام (برای رانندگان)
+              سامانه پایانه بار مجازی شایان ترابر (برای رانندگان)
             </h2>
           </div>
           <div>

@@ -694,7 +694,7 @@ const FormModel = ref({
   insurancePremium: null,
 });
 definePageMeta({
-  title: "استعلام کرایه بارگرام",
+  title: "استعلام کرایه شایان ترابر",
 });
 const closeMap = () => {
   end.value = null;

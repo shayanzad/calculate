@@ -299,7 +299,7 @@ const FormModel = ref({
   productCode: null,
 });
 definePageMeta({
-  title: "استعلام کرایه بارگرام",
+  title: "استعلام کرایه شایان ترابر",
 });
 const closeMap = () => {
   end.value = null;
