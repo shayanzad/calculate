@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <template>
   <div dir="rtl">
     <!-- <v-btn @click="gggg = true">لغو</v-btn> -->
@@ -114,6 +116,41 @@
                   :rules="[(v) => !!v || ' ارزش محموله را مشخص کنید']"
                 ></v-text-field>
               </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  variant="outlined"
+                  v-model="FormModel.mobile"
+                  clearable
+                  required
+                  label="شماره تلفن همراه خودرا وارد کنید"
+                  :rules="[(v) => !!v || '   تلفن همراه را مشخص کنید']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  variant="outlined"
+                  v-model="FormModel.national_code"
+                  clearable
+                  required
+                  label="    کدملی خودرا وارد کنید"
+                  :rules="[(v) => !!v || '      کدملی خود را وارد کنید']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <vue-recaptcha
+                  v-if="isRecaptchaReady"
+                  ref="recaptchaRef"
+                  sitekey="6LeyFecqAAAAANS0crUtnpBoSLLGgUmMVr9UMObB"
+                  size="normal"
+                  theme="light"
+                  hl="fa"
+                  :loading-timeout="loadingTimeout"
+                  @verify="recaptchaVerified"
+                  @expire="recaptchaExpired"
+                  @fail="recaptchaFailed"
+                  @error="recaptchaError"
+                />
+              </v-col>
             </v-row>
 
             <div class="flex justify-end w-[100%]">
@@ -121,7 +158,7 @@
                 class="mt-5 !bg-orange-500 p-4 !text-white"
                 type="submit"
                 color="secondry"
-                @click="submit"
+                @click="openOtpMethod"
                 :loading="loading"
               >
                 محاسبه کرایه
@@ -444,7 +481,7 @@
             بستن
           </v-btn>
           <v-btn
-            @click="sefaresh()"
+            @click="reStore()"
             class="mt-5 mx-2 !bg-orange-500 p-4 !text-white"
             color="secondry"
           >
@@ -501,56 +538,49 @@
       </div>
     </v-card>
   </v-dialog>
-  <v-dialog
-    v-model="showSabtSefaresh"
-    persistent
-    class="h-full p-5"
-    width="600"
-  >
-    <v-card>
-      <div class="p-4">
-        <div class="bg-slate-200 mt-3 mb-8 rounded-md p-3">
-          <span>ثبت سفارش</span>
-        </div>
-        <v-form
-          ref="confirmedForm"
-          validate-on="submit lazy"
-          fast-fail
-          @submit.prevent
-        >
-          <v-row>
-            <v-col cols="12">
-              <v-text-field
-                :rules="[(v) => !!v || 'نام و نام خانوادگی خود را وارد کنید']"
-                variant="outlined"
-                required
-                label="نام و نام خانوادگی"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                :rules="[(v) => !!v || 'شماره تلفن خود را وارد کنید']"
-                type="number"
-                required
-                variant="outlined"
-                label="شماره تلفن"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <div class="flex justify-end">
-                <v-btn @click="setStatus('cancle')" class="mx-2">انصراف</v-btn>
-                <v-btn
-                  class="!bg-orange-500 p-4 !text-white"
-                  color="secondry"
-                  :loading="loadingconfirm"
-                  @click="setStatus('confirm')"
-                  type="submit"
-                  >ثبت سفارش</v-btn
-                >
-              </div>
-            </v-col>
-          </v-row>
-        </v-form>
+  <v-dialog v-model="openOtp" persistent class="h-full p-5" width="400">
+    <v-card
+      class="py-8 px-6 relative text-center mx-auto ma-4"
+      elevation="12"
+      max-width="400"
+      width="100%"
+    >
+      <span
+        @click="closeOtp"
+        class="absolute left-3 top-3 cursor-pointer text-gray-500"
+        >انصراف</span
+      >
+      <h3 class="text-xl mb-4">تایید شماره همراه</h3>
+
+      <div class="text-gray-500">
+        یک کد احراز هویت به شماره {{ FormModel.mobile }} ارسال شد <br />
+
+        تلفن همراه خود را بررسی کنید
+      </div>
+
+      <v-sheet color="surface">
+        <v-otp-input
+          v-model="FormModel.otp"
+          length="5"
+          variant="solo"
+        ></v-otp-input>
+      </v-sheet>
+
+      <div class="flex justify-center flex-col">
+        <v-btn
+          class="my-4 mx-auto !bg-orange-500 text-white"
+          height="40"
+          text="محاسبه نهایی"
+          variant="flat"
+          width="70%"
+          @click="submit"
+          :loading="loading"
+        ></v-btn>
+      </div>
+
+      <div class="text-gray-400">
+        کد را دریافت نکرده اید ؟
+        <a href="#" class="text-gray-900">ارسال مجدد</a>
       </div>
     </v-card>
   </v-dialog>
@@ -561,7 +591,8 @@ import { onMounted, useToast } from "#imports";
 import mapffff from "@/components/map/index.vue";
 import Num2persian from "num2persian";
 const rentMap = ref(false);
-const showSabtSefaresh = ref(false);
+const openOtp = ref(false);
+const otp = ref(null);
 const calculateModel = ref({
   origin: null,
   destination: null,
@@ -575,30 +606,40 @@ const calculatedForm = ref({
   comistion: 0,
   additionalInsuranceOfTheDriver: 0,
 });
-const loadingconfirm = ref(false);
-const setStatus = async (status) => {
-  if (status == "confirm") {
-    const { valid } = await confirmedForm.value.validate();
-    if (valid) {
-      loadingconfirm.value = true;
-      setTimeout(() => {
-        loadingconfirm.value = false;
-        showToast(
-          "اطلاعات شما با موفقیت ثبت شد پس از بررسی توسط کارشناسان با شما تماس حاصل میگردد.",
-          "success",
-          {
-            timeout: 8000,
-            position: "top-right",
-            padding: "10px 20px",
-            className: "my-toast-font",
-          }
-        );
-        showSabtSefaresh.value = false;
-        reStore();
-      }, 1500);
+const openOtpMethod = async () => {
+  const { valid } = await formValidation.value.validate();
+  if (valid) {
+    if (
+      FormModel.value.originCode == null &&
+      FormModel.value.DestinationCode == null &&
+      FormModel.value.CarCode == null
+    ) {
+      return;
     }
-  } else {
-    showSabtSefaresh.value = false;
+    if (captchaConfirmed.value == false) {
+      showToast("  کپچا را به درستی تایید کنید", "info");
+      return;
+    }
+    loading.value = true;
+    apiServices
+      .apiPost("v1/rent_otp", {
+        mobile: FormModel.value.mobile,
+      })
+      .then((res) => {
+        openOtp.value = true;
+        loading.value = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.request.status == 402) {
+          showToast(
+            "کد تایید برای شما ارسال شده است لطفا کمی صبر کنید",
+            "info"
+          );
+          openOtp.value = true;
+        }
+        loading.value = false;
+      });
   }
 };
 const calculatedFormFunction = (rent) => {
@@ -623,6 +664,10 @@ const getAddressOnMap = (val) => {
     isEndSet.value = true;
     end_text.value = val.addressText;
   }
+};
+const closeOtp = () => {
+  openOtp.value = false;
+  FormModel.value.otp = null;
 };
 const calculate = async () => {
   apiServices.apiPost("v1/calculate", {
@@ -686,10 +731,13 @@ const start = ref(null);
 const isStartSet = ref(false);
 const isEndSet = ref(false);
 const FormModel = ref({
+  national_code: null,
   originCode: null,
   DestinationCode: null,
   CarCode: null,
+  otp: null,
   productCode: null,
+  mobile: null,
   insurancePremium: null,
 });
 definePageMeta({
@@ -704,10 +752,35 @@ const closeMap = () => {
   gggg.value = false;
   start.value = null;
 };
+import vueRecaptcha from "vue3-recaptcha2";
+
+const isRecaptchaReady = ref(false);
+const recaptchaRef = ref(null);
+const loadingTimeout = 30000; // مقدار ثابت نیازی به ref ندارد
+
+onMounted(() => {
+  isRecaptchaReady.value = true;
+});
+const captchaConfirmed = ref(false);
+const recaptchaVerified = (response) => {
+  captchaConfirmed.value = true;
+};
+
+const recaptchaExpired = () => {
+  console.log("کپچا منقضی شد!");
+  recaptchaRef.value?.reset();
+};
+
+const recaptchaFailed = () => {
+  console.log("کپچا شکست خورد!");
+};
+
+const recaptchaError = (reason) => {
+  console.log("خطای کپچا:", reason);
+};
 
 const gggg = ref(false);
 const formValidation = ref(null);
-const confirmedForm = ref(null);
 const rentImported = ref({});
 const loading = ref(false);
 const citiesList = ref([]);
@@ -715,16 +788,6 @@ const carTypeList = ref([]);
 const productsList = ref([]);
 const showForm = ref(true);
 
-const sefaresh = () => {
-  showSabtSefaresh.value = true;
-  // rentMap.value = false;
-  // FormModel.value = {
-  //   originCode: null,
-  //   DestinationCode: null,
-  //   CarCode: null,
-  //   productCode: null,
-  // };
-};
 const reStore = () => {
   showForm.value = true;
   rentMap.value = false;
@@ -733,6 +796,8 @@ const reStore = () => {
     DestinationCode: null,
     CarCode: null,
     productCode: null,
+    mobile: null,
+    national_code: null,
   };
   calculateModel.value = {
     origin: null,
@@ -759,42 +824,34 @@ const getProducts = () => {
 };
 
 const submit = async () => {
-  const { valid } = await formValidation.value.validate();
-  if (valid) {
-    if (
-      FormModel.value.originCode == null &&
-      FormModel.value.DestinationCode == null &&
-      FormModel.value.CarCode == null
-    ) {
-      return;
-    }
-    loading.value = true;
-    var iii = FormModel.value;
-    apiServices
-      .apiPost("v1/rent", iii)
-      .then((res) => {
-        if (res.data.rent) {
-          rentImported.value = res.data.rent;
-          loading.value = false;
-          showForm.value = false;
+  loading.value = true;
+  var iii = FormModel.value;
+  apiServices
+    .apiPost("v1/rent", iii)
+    .then((res) => {
+      if (res.data.rent) {
+        rentImported.value = res.data.rent;
+        loading.value = false;
+        showForm.value = false;
 
-          calculatedFormFunction(rentImported.value.price);
-        } else {
-          showToast("موردی برای نمایش وجود ندارد", "info");
-          loading.value = false;
-          showForm.value = true;
-          end.value = null;
-          start.value = null;
-          gggg.value = true;
-        }
-      })
-      .catch((error) => {
-        showToast("عملیات با خطا مواجه شد", "error");
-
+        calculatedFormFunction(rentImported.value.price);
+      } else {
+        showToast("موردی برای نمایش وجود ندارد", "info");
         loading.value = false;
         showForm.value = true;
-      });
-  }
+        end.value = null;
+        start.value = null;
+        gggg.value = true;
+      }
+      closeOtp();
+    })
+    .catch((error) => {
+      showToast("عملیات با خطا مواجه شد", "error");
+      closeOtp();
+
+      loading.value = false;
+      showForm.value = true;
+    });
 };
 
 onMounted(() => {
@@ -803,4 +860,8 @@ onMounted(() => {
   getProducts();
 });
 </script>
- 
+<style>
+.v-otp-input__content {
+  direction: ltr;
+}
+</style>
