@@ -140,7 +140,7 @@
                 <vue-recaptcha
                   v-if="isRecaptchaReady"
                   ref="recaptchaRef"
-                  sitekey="6LeyFecqAAAAANS0crUtnpBoSLLGgUmMVr9UMObB"
+                  sitekey="6Lff9_EqAAAAAEBkAA6ZAOsGkiNG4R8OyjwjzvJe"
                   size="normal"
                   theme="light"
                   hl="fa"
